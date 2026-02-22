@@ -3483,7 +3483,13 @@ def physical(change, text, progress, prog_text, pw_box=None, ok_button=None, bac
         amiroot = "root"
     else:
         dev_cmd = device.shell("ls /dev")
-    if "block" in dev_cmd:
+    if "mmcblk0" in dev_cmd:
+        target = "mmcblk0"
+    elif "sda" in dev_cmd:
+        target = "sda"
+    elif "vda" in dev_cmd:
+        target = "vda"
+    elif "block" in dev_cmd:
         if show_root == True:
             if device_has_su():
                 if c_su:
@@ -3526,7 +3532,7 @@ def physical(change, text, progress, prog_text, pw_box=None, ok_button=None, bac
             size = int(device.shell(f"cat /sys/block/{target}/size"))*512
         if ut == True:
             amiroot = device.shell(f"echo {sh_pwd} | sudo -S whoami 2>/dev/null")
-        if aos == True:
+        elif aos == True:
             amiroot = device.shell("whoami 2>/dev/null")
         else:
             if show_root == True:
