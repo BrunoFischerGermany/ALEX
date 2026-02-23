@@ -24,6 +24,7 @@ import alex.ufed_style as ufed_style
 import alex.devdump as devdump
 import alex.wifi_adb as wifi_adb
 import alex.exploits as exploits
+import alex.shot_ut as shot_ut
 import numpy as np
 import ipaddress
 import sqlite3
@@ -1758,7 +1759,8 @@ class MyApp(ctk.CTk):
         filepath = os.path.join("screenshots", filename)
         hashpath = os.path.join("screenshots", hashname)
         if ut == True:
-            shot = ut_app_shot()
+            #shot = ut_app_shot()
+            shot = shot_ut.shot()
             png_bytes = BytesIO()
             shot.save(png_bytes, format="PNG")
             png = png_bytes.getvalue()
@@ -2387,7 +2389,7 @@ class MyApp(ctk.CTk):
             change.set(1)
 
 
-a_version = 0.4
+a_version = 0.5
 default_host = "127.0.0.1"
 default_port = 5037
 # Abort-Helper for the live logcat capture
@@ -3585,36 +3587,6 @@ def physical(change, text, progress, prog_text, pw_box=None, ok_button=None, bac
             log("Wrong password")
         change.set(1)
         return
-
-#UT App-Screenshot
-def ut_app_shot():
-    fbset = device.shell("fbset")
-    mode_match = re.search(r'mode\s+"(\d+)x(\d+)-\d+"', fbset)
-    if not mode_match:
-        raise ValueError("Mode not found")
-    width = int(mode_match.group(1))
-    height = int(mode_match.group(2))
-    if "rgba" in fbset:
-        order = [0, 1, 2, 3]
-    elif "argb" in fbset:
-        order = [1, 2, 3, 0]
-    elif "bgra" in fbset:
-        order = [2, 1, 0, 3]
-    elif "abgr" in fbset:
-        order = [3, 2, 1, 0]
-    elif "rgbx" in fbset:
-        order = [0, 1, 2] + 255
-    else:
-        order = [0, 1, 2, 3]
-    user = device.shell("whoami")
-    u_id = device.shell(f"id -u {user}")
-    data = device.shell(f"mirscreencast -n 1 -m /var/run/user/{u_id}/mir_socket_trusted --stdout", encoding=None)
-    expected = width * height * 4
-    if len(data) < expected:
-        raise ValueError(f"RAW data too small")
-    arr = np.frombuffer(data[:expected], dtype=np.uint8).reshape((height, width, 4))
-    img = Image.fromarray(arr[:, :, order], "RGBA")
-    return img
 
 #Helper functions for DB Recreation
 def create_table(cur, table_name, columns):
