@@ -40,7 +40,6 @@ import threading
 import adbutils
 import subprocess
 import platform
-import shutil
 import socket
 import select
 import stat
@@ -133,7 +132,7 @@ class MyApp(ctk.CTk):
         self.current_menu = None
 
         # Show Main Menu
-        ctk.CTkLabel(self.dynamic_frame, text=f"ALEX by Christian Peter", text_color="#3f3f3f", height=60, padx=40, font=self.stfont).pack(anchor="center")
+        ctk.CTkLabel(self.dynamic_frame, text="ALEX by Christian Peter", text_color="#3f3f3f", height=60, padx=40, font=self.stfont).pack(anchor="center")
         self.text = ctk.CTkLabel(self.dynamic_frame, width=400, height=250, font=self.stfont, text="Checking adb and device connection ...", anchor="w", justify="left")
         #self.after(2000)
         #self.init_device = threading.Thread(target=self.show_noadbserver())
@@ -284,7 +283,7 @@ class MyApp(ctk.CTk):
     def show_noadbserver(self):
         for widget in self.dynamic_frame.winfo_children():
             widget.destroy()
-        ctk.CTkLabel(self.dynamic_frame, text=f"ALEX by Christian Peter", text_color="#3f3f3f", height=60, padx=40, font=self.stfont).pack(anchor="center")
+        ctk.CTkLabel(self.dynamic_frame, text="ALEX by Christian Peter", text_color="#3f3f3f", height=60, padx=40, font=self.stfont).pack(anchor="center")
         self.text = ctk.CTkLabel(self.dynamic_frame, width=400, height=220, font=self.stfont, anchor="w", justify="left")
         start_error = False
         global device
@@ -397,7 +396,7 @@ class MyApp(ctk.CTk):
     def show_wifi_pairing(self):
         for widget in self.dynamic_frame.winfo_children():
             widget.destroy()
-        ctk.CTkLabel(self.dynamic_frame, text=f"ALEX by Christian Peter", text_color="#3f3f3f", height=40, padx=40, font=self.stfont).pack(anchor="w")
+        ctk.CTkLabel(self.dynamic_frame, text="ALEX by Christian Peter", text_color="#3f3f3f", height=40, padx=40, font=self.stfont).pack(anchor="w")
         ctk.CTkLabel(self.dynamic_frame, text="Wireless Debugging", height=60, width=585, font=("standard",24), justify="left").pack(pady=20)
         self.text = ctk.CTkLabel(self.dynamic_frame, text="\nChoose the Pairing method:", width=585, height=60, font=self.stfont, anchor="w", justify="left")
         self.text.pack(anchor="center", pady=25)
@@ -478,7 +477,7 @@ class MyApp(ctk.CTk):
             dir = os.path.join(os.path.expanduser('~'), "ALEX_out")
         else:
             dir = os.getcwd()
-        ctk.CTkLabel(self.dynamic_frame, text=f"ALEX by Christian Peter", text_color="#3f3f3f", height=60, padx=40, font=self.stfont).pack(anchor="center")
+        ctk.CTkLabel(self.dynamic_frame, text="ALEX by Christian Peter", text_color="#3f3f3f", height=60, padx=40, font=self.stfont).pack(anchor="center")
         ctk.CTkLabel(self.dynamic_frame, text="Choose Output Directory:", height=30, width=585, font=("standard",24), justify="left").pack(pady=20)
         self.browsebutton = ctk.CTkButton(self.dynamic_frame, text="Browse", text_color="#DCE4EE", font=self.stfont, command=lambda: self.browse_cwd(self.outputbox), width=60, fg_color="#2d2d35")
         self.browsebutton.pack(side="bottom", pady=(0,b_button_offset_y), padx=(0,b_button_offset_x))
@@ -3589,10 +3588,6 @@ def physical(change, text, progress, prog_text, pw_box=None, ok_button=None, bac
         return
 
 #Helper functions for DB Recreation
-def create_table(cur, table_name, columns):
-    cols_sql = ", ".join([f'"{col}" TEXT' for col in columns])
-    cur.execute(f"CREATE TABLE IF NOT EXISTS {table_name} ({cols_sql})")
-
 def create_table(cur, name, columns):
     col_def = ", ".join([f'"{col}" TEXT' for col in columns])
     cur.execute(f"DROP TABLE IF EXISTS {name};")
@@ -3890,7 +3885,7 @@ def recreate_dbs(change, text, zip_path=None):
             if os.path.exists(call_db):
                 fname = "dump/data/data/com.android.providers.contacts/databases/calllog.db"
                 if fname not in zf.namelist():
-                 zf.write(call_db, fname)
+                    zf.write(call_db, fname)
             if os.path.exists(contact_db):
                 fname = "dump/data/data/com.android.providers.contacts/databases/contacts2.db"
                 if fname not in zf.namelist():
