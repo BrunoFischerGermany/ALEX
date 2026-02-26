@@ -1759,7 +1759,8 @@ class MyApp(ctk.CTk):
         hashpath = os.path.join("screenshots", hashname)
         if ut == True:
             #shot = ut_app_shot()
-            shot = shot_ut.shot()
+            try: shot = shot_ut.shot()
+            except: shot = shot_ut.shot_alt()
             png_bytes = BytesIO()
             shot.save(png_bytes, format="PNG")
             png = png_bytes.getvalue()
